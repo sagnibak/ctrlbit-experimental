@@ -97,7 +97,6 @@ class Utils:
 
 
 def on_forever():
-    speed_val = 90
     # steering control
     if input.button_is_pressed(Button.A):
         # steer left
@@ -113,17 +112,9 @@ def on_forever():
         radio.send_value(STEERING_KEY, 90)
 
     # speed control
-    myAngle = input.rotation(Rotation.PITCH)
-    if myAngle < -30:
-        speed_val += 10
-        Utils().drawSpeedBar((speed_val - 90) // 22)
-        radio.send_value(SPEED_KEY, speed_val)
-    elif myAngle > 30:
-        speed_val -= 10
-        Utils().drawSpeedBar((speed_val - 90) // 22)
-        radio.send_value(SPEED_KEY, speed_val)
-    else:
-        Utils().drawSpeedBar(0)
-        radio.send_value(SPEED_KEY, 90)
+    myAngle = input.rotation(Rotation.PITCH) # in range [-90, 90]
+    mySpeed = -1 * myAngle + 90
+    Utils().drawSpeedBar((mySpeed - 90) // 22)
+    radio.send_value(SPEED_KEY, mySpeed)
 
 basic.forever(on_forever)

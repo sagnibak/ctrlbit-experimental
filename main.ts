@@ -110,7 +110,6 @@ class Utils {
 }
 
 basic.forever(function on_forever() {
-    let speed_val = 90
     //  steering control
     if (input.buttonIsPressed(Button.A)) {
         //  steer left
@@ -128,17 +127,8 @@ basic.forever(function on_forever() {
     
     //  speed control
     let myAngle = input.rotation(Rotation.Pitch)
-    if (myAngle < -30) {
-        speed_val += 10
-        new Utils().drawSpeedBar(Math.idiv(speed_val - 90, 22))
-        radio.sendValue(SPEED_KEY, speed_val)
-    } else if (myAngle > 30) {
-        speed_val -= 10
-        new Utils().drawSpeedBar(Math.idiv(speed_val - 90, 22))
-        radio.sendValue(SPEED_KEY, speed_val)
-    } else {
-        new Utils().drawSpeedBar(0)
-        radio.sendValue(SPEED_KEY, 90)
-    }
-    
+    //  in range [-90, 90]
+    let mySpeed = -1 * myAngle + 90
+    new Utils().drawSpeedBar(Math.idiv(mySpeed - 90, 22))
+    radio.sendValue(SPEED_KEY, mySpeed)
 })
